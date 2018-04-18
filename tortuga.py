@@ -12,7 +12,7 @@ def aplicarProducciones(palabra):
 def aplicarRegla(simbolo):
 
     if simbolo == "f":
-        return "fffff+ff-f+"
+        return "f+f-f-f++"
     elif simbolo == "b":
         return "b-"
 

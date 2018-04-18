@@ -18,7 +18,7 @@ def aplicarProducciones(palabra):
 def aplicarRegla(simbolo):
 
     if simbolo == "f":
-        return "fffff+ff-f+"
+        return "f+f-f-f+f"
     elif simbolo == "b":
         return "b-"
 
@@ -59,6 +59,8 @@ def makePoly(cadena):
 
             elif dirX == -1 and dirY == -1:
                 orientacion = [-1,0,0]
+            elif dirX == -1 and dirY == 1:
+                orientacion = [0,1,0]
 
 
         elif c == '-':
@@ -84,6 +86,8 @@ def makePoly(cadena):
 
             elif dirX == -1 and dirY == -1:
                 orientacion = [0,-1,0]
+            elif dirX == -1 and dirY == 1:
+                orientacion = [-1,0,0]
 
 
 
@@ -93,11 +97,12 @@ verts=[]
 faces = []
 
 palabraInicial = "f"
-vueltas = 10
+vueltas = 1
 palabra = ""
 for i in range(vueltas):
     palabra = palabra + aplicarProducciones(palabraInicial)
 
+print palabra
 makePoly(palabra)
 
 mesh = bpy.data.meshes.new("test");

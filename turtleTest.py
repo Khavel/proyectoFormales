@@ -37,7 +37,6 @@ def drawLsystem(aTurtle, instructions, angle, distance):
 
 def main():
     inst = createLSystem(4, "F")   # create the string
-    print(inst)
     t = turtle.Turtle()            # create the turtle
     wn = turtle.Screen()
 
