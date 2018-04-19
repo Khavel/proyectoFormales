@@ -18,7 +18,7 @@ def aplicarProducciones(palabra):
 def aplicarRegla(simbolo):
 
     if simbolo == "f":
-        return "f+f-f-f+f"
+        return "fffff+ff-f+"
     elif simbolo == "b":
         return "b-"
 
@@ -29,36 +29,40 @@ def makePoly(cadena):
     global orientacion
     global pos
     global verts
+    vertCont = 0
     for c in cadena:
 
         if c == 'f':
             v = [pos[0] + orientacion[0],pos[1] + orientacion[1],0]
             pos = v
             verts.append(v)
+            edges.append((vertCont,vertCont-1))
+            vertCont = vertCont + 1
 
         elif c == '+':
             dirX = orientacion[0]
             dirY = orientacion[1]
-            if dirX == 0 and dirY == 0:
-                orientacion = [0,1,0]
-
-            elif dirX == 0 and dirY == 1:
+            if dirX == 0 and dirY == 1:
                 orientacion = [1,1,0]
-
-            elif dirX == 1 and dirY == 0:
-                orientacion = [-1,1,0]
 
             elif dirX == 1 and dirY == 1:
                 orientacion = [1,0,0]
 
+            elif dirX == 1 and dirY == 0:
+                orientacion = [1,-1,0]
+
+            elif dirX == 1 and dirY == -1:
+                orientacion = [0,-1,0]
+
             elif dirX == 0 and dirY == -1:
                 orientacion = [-1,-1,0]
+
+            elif dirX == -1 and dirY == -1:
+                orientacion = [-1,0,0]
 
             elif dirX == -1 and dirY == 0:
                 orientacion = [-1,1,0]
 
-            elif dirX == -1 and dirY == -1:
-                orientacion = [-1,0,0]
             elif dirX == -1 and dirY == 1:
                 orientacion = [0,1,0]
 
@@ -66,26 +70,29 @@ def makePoly(cadena):
         elif c == '-':
             dirX = orientacion[0]
             dirY = orientacion[1]
-            if dirX == 0 and dirY == 0:
-                orientacion = [0,-1,0]
 
-            elif dirX == 0 and dirY == 1:
+
+            if dirX == 0 and dirY == 1:
                 orientacion = [-1,1,0]
-
-            elif dirX == 1 and dirY == 0:
-                orientacion = [1,1,0]
 
             elif dirX == 1 and dirY == 1:
                 orientacion = [0,1,0]
 
+            elif dirX == 1 and dirY == 0:
+                orientacion = [1,1,0]
+
+            elif dirX == 1 and dirY == -1:
+                orientacion = [1,0,0]
+
             elif dirX == 0 and dirY == -1:
                 orientacion = [1,-1,0]
+
+            elif dirX == -1 and dirY == -1:
+                orientacion = [0,-1,0]
 
             elif dirX == -1 and dirY == 0:
                 orientacion = [-1,-1,0]
 
-            elif dirX == -1 and dirY == -1:
-                orientacion = [0,-1,0]
             elif dirX == -1 and dirY == 1:
                 orientacion = [-1,0,0]
 
@@ -93,23 +100,36 @@ def makePoly(cadena):
 
 
 verts=[]
-
+edges = []
 faces = []
 
 palabraInicial = "f"
-vueltas = 1
+vueltas = 8
 palabra = ""
 for i in range(vueltas):
     palabra = palabra + aplicarProducciones(palabraInicial)
 
-print palabra
+#print palabra
 makePoly(palabra)
 
 mesh = bpy.data.meshes.new("test");
-mesh.from_pydata(verts, [], faces)
+edges.append((0,len(edges)-1))
+mesh.from_pydata(verts, edges, faces)
 mesh.validate(True)
 mesh.show_normal_face = True
 
 obj = bpy.data.objects.new("test", mesh)
 scn = bpy.context.scene
 scn.objects.link(obj)
+
+bpy.context.scene.objects.active = obj
+
+bpy.ops.object.mode_set(mode='EDIT', toggle=True)
+bpy.ops.mesh.select_mode( type  = 'VERT')
+bpy.ops.mesh.select_all( action = 'SELECT')
+
+bpy.ops.mesh.extrude_region_move(TRANSFORM_OT_translate={"value":(0, 0, 3)})
+bpy.ops.mesh.extrude_region_move(TRANSFORM_OT_translate={"value":(0, 0, 3)})
+
+
+bpy.ops.object.mode_set( mode = 'OBJECT' )

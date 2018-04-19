@@ -12,7 +12,7 @@ def aplicarProducciones(palabra):
 def aplicarRegla(simbolo):
 
     if simbolo == "f":
-        return "f+f-f-f++"
+        return "fffff+ff-f+"
     elif simbolo == "b":
         return "b-"
 
@@ -24,13 +24,13 @@ def dibujar(turtle, cadena):
         elif c == 'b':
             turtle.backward(5)
         elif c == '+':
-            turtle.right(60)
+            turtle.right(45)
         elif c == '-':
-            turtle.left(60)
+            turtle.left(45)
 
 
 palabraInicial = "f"
-vueltas = 10
+vueltas = 8
 palabra = ""
 for i in range(vueltas):
     palabra = palabra + aplicarProducciones(palabraInicial)
