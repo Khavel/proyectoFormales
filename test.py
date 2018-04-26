@@ -4,6 +4,7 @@ import bpy
 
 orientacion = [0,1,0]
 pos = [0,0,0]
+brackets = []
 
 
 
@@ -16,11 +17,12 @@ def aplicarProducciones(palabra):
     return nuevaPalabra
 
 def aplicarRegla(simbolo):
-
     if simbolo == "f":
-        return "fffff+ff-f+"
+        return "ff[-f]f[+f][f+]"
     elif simbolo == "b":
         return "b-"
+    else:
+        return simbolo
 
 
 
@@ -29,6 +31,7 @@ def makePoly(cadena):
     global orientacion
     global pos
     global verts
+    global brackets
     vertCont = 0
     for c in cadena:
 
@@ -38,7 +41,12 @@ def makePoly(cadena):
             verts.append(v)
             edges.append((vertCont,vertCont-1))
             vertCont = vertCont + 1
-
+        elif c == '[':
+            brackets.append((pos,orientacion))
+        elif c == ']':
+            pos_brackets,head_brackets = brackets.pop()
+            pos = pos_brackets
+            orientacion = head_brackets
         elif c == '+':
             dirX = orientacion[0]
             dirY = orientacion[1]
@@ -96,6 +104,35 @@ def makePoly(cadena):
             elif dirX == -1 and dirY == 1:
                 orientacion = [-1,0,0]
 
+            elif c == '*':
+                dirX = orientacion[0]
+                dirY = orientacion[1]
+                dirZ = orientacion[2]
+
+                if dirX == 0 and dirY == 1:
+                    orientacion = [-1,1,0]
+
+                elif dirX == 1 and dirY == 1:
+                    orientacion = [0,1,0]
+
+                elif dirX == 1 and dirY == 0:
+                    orientacion = [1,1,0]
+
+                elif dirX == 1 and dirY == -1:
+                    orientacion = [1,0,0]
+
+                elif dirX == 0 and dirY == -1:
+                    orientacion = [1,-1,0]
+
+                elif dirX == -1 and dirY == -1:
+                    orientacion = [0,-1,0]
+
+                elif dirX == -1 and dirY == 0:
+                    orientacion = [-1,-1,0]
+
+                elif dirX == -1 and dirY == 1:
+                    orientacion = [-1,0,0]
+
 
 
 
@@ -103,11 +140,12 @@ verts=[]
 edges = []
 faces = []
 
-palabraInicial = "f"
-vueltas = 8
-palabra = ""
+
+vueltas = 5
+palabra = "f"
 for i in range(vueltas):
-    palabra = palabra + aplicarProducciones(palabraInicial)
+
+    palabra = palabra + aplicarProducciones(palabra)
 
 #print palabra
 makePoly(palabra)

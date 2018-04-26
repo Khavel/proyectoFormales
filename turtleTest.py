@@ -1,5 +1,6 @@
 import turtle
 
+brackets = []
 def createLSystem(numIters,axiom):
     startString = axiom
     endString = ""
@@ -17,29 +18,39 @@ def processString(oldStr):
 
 def applyRules(ch):
     newstr = ""
-    if ch == 'F':
-        newstr = 'F-F++F-F'   # Rule 1
+    if ch == 'f':
+        newstr = 'ff[-ff[+f][f+]]'   # Rule 1
     else:
         newstr = ch    # no rules apply so keep the character
 
     return newstr
 
 def drawLsystem(aTurtle, instructions, angle, distance):
+    global brackets
     for cmd in instructions:
-        if cmd == 'F':
+        if cmd == 'f':
             aTurtle.forward(distance)
         elif cmd == 'B':
             aTurtle.backward(distance)
+        elif cmd == '[':
+            brackets.append((aTurtle.position(),aTurtle.heading()))
+        elif cmd == ']':
+            pos,head = brackets.pop()
+            aTurtle.penup()
+            aTurtle.setposition(pos)
+            aTurtle.setheading(head)
+            aTurtle.pendown()
         elif cmd == '+':
             aTurtle.right(angle)
         elif cmd == '-':
             aTurtle.left(angle)
 
 def main():
-    inst = createLSystem(4, "F")   # create the string
+
+    inst = createLSystem(4, "f")   # create the string
+    print inst
     t = turtle.Turtle()            # create the turtle
     wn = turtle.Screen()
-
     t.up()
     t.back(200)
     t.down()
