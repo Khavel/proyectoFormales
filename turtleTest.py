@@ -19,7 +19,7 @@ def processString(oldStr):
 def applyRules(ch):
     newstr = ""
     if ch == 'f':
-        newstr = 'ff[-ff[+f][f+]]'   # Rule 1
+        newstr = 'ff+[-ffff-fff+[+f][-ff]]'   # Rule 1
     else:
         newstr = ch    # no rules apply so keep the character
 
