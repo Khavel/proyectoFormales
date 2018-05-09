@@ -2,7 +2,7 @@
 import math
 import bpy
 
-orientacion = [0,1,0]
+orientacion = [1,1,0]
 pos = [0,0,0]
 brackets = []
 
@@ -18,9 +18,9 @@ def aplicarProducciones(palabra):
 
 def aplicarRegla(simbolo):
     if simbolo == "f":
-        return "*ff[-f/]f[+f*][f+]"
+        return "*f+b[-f/]b[+f*][b+]"
     elif simbolo == "b":
-        return "b-"
+        return "b-fbb[++f]fb"
     else:
         return simbolo
 
@@ -32,12 +32,23 @@ def makePoly(cadena):
     global pos
     global verts
     global brackets
-    vertCont = 1
+    vertCont = 0
     trasBracket = False
     for c in cadena:
 
         if c == 'f':
             v = [pos[0] + orientacion[0],pos[1] + orientacion[1],pos[2] + orientacion[2]]
+            pos = v
+            if not v in verts:
+                verts.append(v)
+                vertCont = vertCont + 1
+                if not trasBracket:
+                    edges.append((vertCont,vertCont-1))
+                else:
+                    trasBracket = False
+
+        if c == 'b':
+            v = [pos[0] - orientacion[0],pos[1] - orientacion[1],pos[2] - orientacion[2]]
             pos = v
             if not v in verts:
                 verts.append(v)
@@ -62,58 +73,60 @@ def makePoly(cadena):
         elif c == '+':
             dirX = orientacion[0]
             dirY = orientacion[1]
+            dirZ = orientacion[2]
             if dirX == 0 and dirY == 1:
-                orientacion = [1,1,0]
+                orientacion = [1,1,dirZ]
 
             elif dirX == 1 and dirY == 1:
-                orientacion = [1,0,0]
+                orientacion = [1,0,dirZ]
 
             elif dirX == 1 and dirY == 0:
-                orientacion = [1,-1,0]
+                orientacion = [1,-1,dirZ]
 
             elif dirX == 1 and dirY == -1:
-                orientacion = [0,-1,0]
+                orientacion = [0,-1,dirZ]
 
             elif dirX == 0 and dirY == -1:
-                orientacion = [-1,-1,0]
+                orientacion = [-1,-1,dirZ]
 
             elif dirX == -1 and dirY == -1:
-                orientacion = [-1,0,0]
+                orientacion = [-1,0,dirZ]
 
             elif dirX == -1 and dirY == 0:
-                orientacion = [-1,1,0]
+                orientacion = [-1,1,dirZ]
 
             elif dirX == -1 and dirY == 1:
-                orientacion = [0,1,0]
+                orientacion = [0,1,dirZ]
 
 
         elif c == '-':
             dirX = orientacion[0]
             dirY = orientacion[1]
+            dirZ = orientacion[2]
 
             if dirX == 0 and dirY == 1:
-                orientacion = [-1,1,0]
+                orientacion = [-1,1,dirZ]
 
             elif dirX == 1 and dirY == 1:
-                orientacion = [0,1,0]
+                orientacion = [0,1,dirZ]
 
             elif dirX == 1 and dirY == 0:
-                orientacion = [1,1,0]
+                orientacion = [1,1,dirZ]
 
             elif dirX == 1 and dirY == -1:
-                orientacion = [1,0,0]
+                orientacion = [1,0,dirZ]
 
             elif dirX == 0 and dirY == -1:
-                orientacion = [1,-1,0]
+                orientacion = [1,-1,dirZ]
 
             elif dirX == -1 and dirY == -1:
-                orientacion = [0,-1,0]
+                orientacion = [0,-1,dirZ]
 
             elif dirX == -1 and dirY == 0:
-                orientacion = [-1,-1,0]
+                orientacion = [-1,-1,dirZ]
 
             elif dirX == -1 and dirY == 1:
-                orientacion = [-1,0,0]
+                orientacion = [-1,0,dirZ]
 
             #Hacia arriba
         elif c == '*':
@@ -166,11 +179,11 @@ faces = []
 vueltas = 5
 palabra = "f"
 for i in range(vueltas):
-
     palabra = palabra + aplicarProducciones(palabra)
 
 #print palabra
 makePoly(palabra)
+
 
 mesh = bpy.data.meshes.new("test");
 #edges.append((0,len(edges)-1))
