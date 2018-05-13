@@ -19,7 +19,7 @@ def processString(oldStr):
 def applyRules(ch):
     newstr = ""
     if ch == 'f':
-        newstr = 'ff+[-ffff-fff+[+f][-ff]]'   # Rule 1
+        newstr = 'f[+f[+f-f][-f+f]][-f[-f+f][+f-f]]fffffff'   # Rule 1
     else:
         newstr = ch    # no rules apply so keep the character
 
@@ -47,7 +47,7 @@ def drawLsystem(aTurtle, instructions, angle, distance):
 
 def main():
 
-    inst = createLSystem(4, "f")   # create the string
+    inst = createLSystem(2, "f")   # create the string
     print inst
     t = turtle.Turtle()            # create the turtle
     wn = turtle.Screen()
@@ -55,7 +55,7 @@ def main():
     t.back(200)
     t.down()
     t.speed(9)
-    drawLsystem(t, inst, 60, 5)   # draw the picture
+    drawLsystem(t, inst, 80, 15)   # draw the picture
                                   # angle 60, segment length 5
     wn.exitonclick()
 
