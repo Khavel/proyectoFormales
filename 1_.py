@@ -30,9 +30,9 @@ def aplicarRegla(simbolo):
 
 
 def makePoly(cadena):
-    step = random.uniform(0.3,0.8)
-    stepV = random.uniform(0.2,0.6)
-    orientacion = [step,step,stepV]
+    step = random.uniform(0.3,0.5)
+    stepV = random.uniform(0.2,0.4)
+    orientacion = [1,1,1]
     pos = [0,0,0]
     brackets = []
     ant = 0
@@ -42,9 +42,10 @@ def makePoly(cadena):
     cAnt = 'x' #Variable para guardar el caracter anterior en el bucle
 
     for c in cadena:
-
+        step = random.uniform(0.3,2)
+        stepV = random.uniform(0.2,1)
         if c == 'f':
-            v = [pos[0] + orientacion[0],pos[1] + orientacion[1],pos[2] + orientacion[2]]
+            v = [pos[0] + (orientacion[0]*step),pos[1] + (orientacion[1]*step),pos[2] + (orientacion[2]*stepV)]
             pos = v
             if not v in verts:
                 verts.append(v)
@@ -80,29 +81,29 @@ def makePoly(cadena):
             dirX = orientacion[0]
             dirY = orientacion[1]
             dirZ = orientacion[2]
-            if dirX == 0 and dirY == step:
-                orientacion = [step,step,dirZ]
+            if dirX == 0 and dirY == 1:
+                orientacion = [1,1,dirZ]
 
-            elif dirX == step and dirY == step:
-                orientacion = [step,0,dirZ]
+            elif dirX == 1 and dirY == 1:
+                orientacion = [1,0,dirZ]
 
-            elif dirX == step and dirY == 0:
-                orientacion = [step,-step,dirZ]
+            elif dirX == 1 and dirY == 0:
+                orientacion = [1,-1,dirZ]
 
-            elif dirX == step and dirY == -step:
-                orientacion = [0,-step,dirZ]
+            elif dirX == 1 and dirY == -1:
+                orientacion = [0,-1,dirZ]
 
-            elif dirX == 0 and dirY == -step:
-                orientacion = [-step,-step,dirZ]
+            elif dirX == 0 and dirY == -1:
+                orientacion = [-1,-1,dirZ]
 
-            elif dirX == -step and dirY == -step:
-                orientacion = [-step,0,dirZ]
+            elif dirX == -1 and dirY == -1:
+                orientacion = [-1,0,dirZ]
 
-            elif dirX == -step and dirY == 0:
-                orientacion = [-step,step,dirZ]
+            elif dirX == -1 and dirY == 0:
+                orientacion = [-1,1,dirZ]
 
-            elif dirX == -step and dirY == step:
-                orientacion = [0,step,dirZ]
+            elif dirX == -1 and dirY == 1:
+                orientacion = [0,1,dirZ]
 
 
         elif c == '-':
@@ -110,29 +111,29 @@ def makePoly(cadena):
             dirY = orientacion[1]
             dirZ = orientacion[2]
 
-            if dirX == 0 and dirY == step:
-                orientacion = [-step,step,dirZ]
+            if dirX == 0 and dirY == 1:
+                orientacion = [-1,1,dirZ]
 
-            elif dirX == step and dirY == step:
-                orientacion = [0,step,dirZ]
+            elif dirX == 1 and dirY == 1:
+                orientacion = [0,1,dirZ]
 
-            elif dirX == step and dirY == 0:
-                orientacion = [step,step,dirZ]
+            elif dirX == 1 and dirY == 0:
+                orientacion = [1,1,dirZ]
 
-            elif dirX == step and dirY == -step:
-                orientacion = [step,0,dirZ]
+            elif dirX == 1 and dirY == -1:
+                orientacion = [1,0,dirZ]
 
-            elif dirX == 0 and dirY == -step:
-                orientacion = [step,-step,dirZ]
+            elif dirX == 0 and dirY == -1:
+                orientacion = [1,-1,dirZ]
 
-            elif dirX == -step and dirY == -step:
-                orientacion = [0,-step,dirZ]
+            elif dirX == -1 and dirY == -1:
+                orientacion = [0,-1,dirZ]
 
-            elif dirX == -step and dirY == 0:
-                orientacion = [-step,-step,dirZ]
+            elif dirX == -1 and dirY == 0:
+                orientacion = [-1,-1,dirZ]
 
-            elif dirX == -step and dirY == step:
-                orientacion = [-step,0,dirZ]
+            elif dirX == -1 and dirY == 1:
+                orientacion = [-1,0,dirZ]
 
             #Hacia arriba
         elif c == '*':
@@ -141,10 +142,11 @@ def makePoly(cadena):
             dirZ = orientacion[2]
 
             if dirZ == 0:
-                orientacion = [dirX,dirY,stepV]
+                orientacion = [dirX,dirY,1]
 
-            elif dirZ == stepV:
-                v = [pos[0],pos[1],pos[2] + stepV]
+            elif dirZ == 1:
+
+                v = [pos[0],pos[1],pos[2] + (stepV*orientacion[2])]
                 pos = v
                 if not v in verts:
                     verts.append(v)
@@ -154,8 +156,9 @@ def makePoly(cadena):
                     else:
                         trasBracket = False
                         edges.append((vertCont-1,ant))
+                        hojas.append(vertCont-2)
 
-            elif dirZ == -stepV:
+            elif dirZ == -1:
                 orientacion = [dirX,dirY,0]
             #Hacia abajo
         elif c == '/':
@@ -164,13 +167,13 @@ def makePoly(cadena):
             dirZ = orientacion[2]
 
             if dirZ == 0:
-                orientacion = [dirX,dirY,-stepV]
+                orientacion = [dirX,dirY,-1]
 
-            elif dirZ == stepV:
+            elif dirZ == 1:
                 orientacion = [dirX,dirY,0]
 
-            elif dirZ == -stepV:
-                v = [pos[0],pos[1],pos[2] - stepV]
+            elif dirZ == -1:
+                v = [pos[0],pos[1],pos[2] - (stepV*orientacion[2])]
                 pos = v
                 if not v in verts:
                     verts.append(v)
@@ -180,15 +183,16 @@ def makePoly(cadena):
                     else:
                         trasBracket = False
                         edges.append((vertCont-1,ant))
+                        hojas.append(vertCont-2)
         cAnt = c
-
+'''
 def measure (first, second):
 	locx = second[0] - first[0]
 	locy = second[1] - first[1]
 	locz = second[2] - first[2]
 	distance = sqrt((locx)**2 + (locy)**2 + (locz)**2)
 	return distance
-
+'''
 
 verts=[]
 edges = []
@@ -197,7 +201,7 @@ vverts = []
 raices = []
 hojas = []
 
-vueltas = 3
+vueltas = 2
 palabra = "f"
 for i in range(vueltas):
     palabra = palabra + aplicarProducciones(palabra)
@@ -229,30 +233,16 @@ bpy.ops.object.modifier_apply(modifier="subd")
 obj.modifiers.new("skin", type='SKIN')
 obj.modifiers.new("subd", type='SUBSURF')
 obj.modifiers['subd'].levels = 1
-mat = bpy.data.materials.new(name="Marron") #set new material to variable
-obj.data.materials.append(mat) #add the material to the object
-bpy.context.object.active_material.diffuse_color = (0.118,0.060,0.040) #change color
-grosores = []
+mat = bpy.data.materials.new(name="Marron") #crea y guarda el material del otrnco del arbol
+obj.data.materials.append(mat) #pon material al modelo
+bpy.context.object.active_material.diffuse_color = (0.118,0.060,0.040) #Color marron
+
 grosor = 0.05
 for i,v in enumerate(obj.data.skin_vertices[0].data):
     v.radius = random.uniform(0.05,0.2), random.uniform(0.05,0.2)
     if i in hojas:
-        bpy.ops.mesh.primitive_ico_sphere_add(location=verts[i],subdivisions=2,size=random.uniform(0.2,0.8))
+        bpy.ops.mesh.primitive_ico_sphere_add(location=verts[i],subdivisions=2,size=random.uniform(0.4,1))
         ob = bpy.context.active_object
-        mat = bpy.data.materials.new(name="Verde") #set new material to variable
-        ob.data.materials.append(mat) #add the material to the object
-        bpy.context.object.active_material.diffuse_color = (0, random.uniform(0.6,1), random.uniform(0.2,0.8)) #change color
-
-'''
-for i,v in enumerate(obj.data.skin_vertices[0].data):
-    vActual = verts[i]
-    vSiguiente = verts[i+1]
-    dist = measure(vActual,vSiguiente)
-    if i in raices:
-        grosores.append(grosor)
-    if dist > 1:
-        grosor = grosores.pop()
-
-    v.radius = grosor, grosor
-    grosor = grosor - 0.5/len(verts)
-'''
+        mat = bpy.data.materials.new(name="Verde")
+        ob.data.materials.append(mat)
+        bpy.context.object.active_material.diffuse_color = (random.uniform(0,0.4), random.uniform(0.3,1), random.uniform(0.2,0.8))
